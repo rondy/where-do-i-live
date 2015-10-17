@@ -1,24 +1,28 @@
 require 'rails_helper'
 
+def get_cep_response(cep)
+  savon_client = Savon.client do
+    wsdl 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep?wsdl'
+    endpoint 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep'
+    basic_auth('usr_soa_ge', '66f82a4')
+  end
+
+  request_body = {
+    dados_entrada: {
+      cod_sistema: 'GE',
+      num_cep: cep
+    }
+  }
+
+  response = savon_client.call(:consulta_cep, message: request_body)
+  response.body[:consulta_cep_response][:retorno]
+end
+
 describe 'Consult CEP from SOAP API' do
   it 'consults a valid cep' do
     cep = '01420020'
 
-    savon_client = Savon.client do
-      wsdl 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep?wsdl'
-      endpoint 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep'
-      basic_auth('usr_soa_ge', '66f82a4')
-    end
-
-    request_body = {
-      dados_entrada: {
-        cod_sistema: 'GE',
-        num_cep: cep
-      }
-    }
-
-    response = savon_client.call(:consulta_cep, message: request_body)
-    cep_response = response.body[:consulta_cep_response][:retorno]
+    cep_response = get_cep_response(cep)
 
     expect(cep_response).to eq({
       :cod_retorno=>"0",
@@ -39,21 +43,7 @@ describe 'Consult CEP from SOAP API' do
   it 'consults a generic cep' do
     cep = '77500000'
 
-    savon_client = Savon.client do
-      wsdl 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep?wsdl'
-      endpoint 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep'
-      basic_auth('usr_soa_ge', '66f82a4')
-    end
-
-    request_body = {
-      dados_entrada: {
-        cod_sistema: 'GE',
-        num_cep: cep
-      }
-    }
-
-    response = savon_client.call(:consulta_cep, message: request_body)
-    cep_response = response.body[:consulta_cep_response][:retorno]
+    cep_response = get_cep_response(cep)
 
     expect(cep_response).to eq({
       :cod_retorno=>"0",
@@ -74,21 +64,7 @@ describe 'Consult CEP from SOAP API' do
   it 'consults a invalid cep' do
     cep = '775000000'
 
-    savon_client = Savon.client do
-      wsdl 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep?wsdl'
-      endpoint 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep'
-      basic_auth('usr_soa_ge', '66f82a4')
-    end
-
-    request_body = {
-      dados_entrada: {
-        cod_sistema: 'GE',
-        num_cep: cep
-      }
-    }
-
-    response = savon_client.call(:consulta_cep, message: request_body)
-    cep_response = response.body[:consulta_cep_response][:retorno]
+    cep_response = get_cep_response(cep)
 
     expect(cep_response).to eq({
       :cod_retorno=>"-1",
@@ -100,21 +76,7 @@ describe 'Consult CEP from SOAP API' do
   it 'consults a not registered cep' do
     cep = '70000000'
 
-    savon_client = Savon.client do
-      wsdl 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep?wsdl'
-      endpoint 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep'
-      basic_auth('usr_soa_ge', '66f82a4')
-    end
-
-    request_body = {
-      dados_entrada: {
-        cod_sistema: 'GE',
-        num_cep: cep
-      }
-    }
-
-    response = savon_client.call(:consulta_cep, message: request_body)
-    cep_response = response.body[:consulta_cep_response][:retorno]
+    cep_response = get_cep_response(cep)
 
     expect(cep_response).to eq({
       :cod_retorno=>"1",
@@ -135,21 +97,7 @@ describe 'Consult CEP from SOAP API' do
   it 'consults a not informed cep' do
     cep = '00000000'
 
-    savon_client = Savon.client do
-      wsdl 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep?wsdl'
-      endpoint 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep'
-      basic_auth('usr_soa_ge', '66f82a4')
-    end
-
-    request_body = {
-      dados_entrada: {
-        cod_sistema: 'GE',
-        num_cep: cep
-      }
-    }
-
-    response = savon_client.call(:consulta_cep, message: request_body)
-    cep_response = response.body[:consulta_cep_response][:retorno]
+    cep_response = get_cep_response(cep)
 
     expect(cep_response).to eq({
       :cod_retorno=>"1",
