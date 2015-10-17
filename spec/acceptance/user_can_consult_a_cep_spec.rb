@@ -36,4 +36,13 @@ feature 'User can consult a cep' do
 
     expect(page).to have_content('Não foi possível consultar o CEP (CEP não registrado).')
   end
+
+  scenario 'User can consult a not informed cep' do
+    visit root_url
+
+    fill_in :cep, with: '00000000'
+    click_button 'Consultar CEP'
+
+    expect(page).to have_content('Não foi possível consultar o CEP (CEP não informado).')
+  end
 end

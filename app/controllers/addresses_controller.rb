@@ -9,6 +9,8 @@ class AddressesController < ApplicationController
       @consult_message = 'PORTO NACIONAL - TO'
     elsif params[:cep] == '70000000'
       @consult_message = 'Não foi possível consultar o CEP (CEP não registrado).'
+    elsif params[:cep] == '00000000'
+      @consult_message = 'Não foi possível consultar o CEP (CEP não informado).'
     else
       @consult_message = 'Não foi possível consultar o CEP (CEP inválido).'
     end
