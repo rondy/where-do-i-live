@@ -1,0 +1,8 @@
+<% if defined?(@consult_message) %>
+  <p><%= @consult_message %></p>
+<% end %>
+
+<%= form_tag consult_cep_path do %>
+  <%= text_field_tag 'cep' %>
+  <%= submit_tag 'Consultar CEP' %>
+<% end %>
