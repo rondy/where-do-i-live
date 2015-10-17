@@ -7,6 +7,8 @@ class AddressesController < ApplicationController
       @consult_message = 'RUA MARILA, JARDIM PAULISTA. SAO PAULO - SP'
     elsif params[:cep] == '77500000'
       @consult_message = 'PORTO NACIONAL - TO'
+    elsif params[:cep] == '70000000'
+      @consult_message = 'Não foi possível consultar o CEP (CEP não registrado).'
     else
       @consult_message = 'Não foi possível consultar o CEP (CEP inválido).'
     end

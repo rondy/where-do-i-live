@@ -27,4 +27,13 @@ feature 'User can consult a cep' do
 
     expect(page).to have_content('PORTO NACIONAL - TO')
   end
+
+  scenario 'User can consult a not registered cep' do
+    visit root_url
+
+    fill_in :cep, with: '70000000'
+    click_button 'Consultar CEP'
+
+    expect(page).to have_content('Não foi possível consultar o CEP (CEP não registrado).')
+  end
 end
