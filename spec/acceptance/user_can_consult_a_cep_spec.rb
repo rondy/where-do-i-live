@@ -7,7 +7,7 @@ feature 'User can consult a cep' do
     fill_in :cep, with: '01420020'
     click_button 'Consultar CEP'
 
-    expect(page).to have_content('RUA MARILA, JARDIM PAULISTA. SAO PAULO - SP')
+    expect(page).to have_css('.cep-valid', text: 'RUA MARILA, JARDIM PAULISTA. SAO PAULO - SP')
   end
 
   scenario 'User can consult a invalid cep' do
@@ -16,7 +16,7 @@ feature 'User can consult a cep' do
     fill_in :cep, with: '775000000'
     click_button 'Consultar CEP'
 
-    expect(page).to have_content('Não foi possível consultar o CEP (CEP inválido).')
+    expect(page).to have_css('.cep-invalid', text: 'Não foi possível consultar o CEP (CEP inválido).')
   end
 
   scenario 'User can consult a generic cep' do
@@ -25,7 +25,7 @@ feature 'User can consult a cep' do
     fill_in :cep, with: '77500000'
     click_button 'Consultar CEP'
 
-    expect(page).to have_content('PORTO NACIONAL - TO')
+    expect(page).to have_css('.cep-valid', text: 'PORTO NACIONAL - TO')
   end
 
   scenario 'User can consult a not registered cep' do
@@ -34,7 +34,7 @@ feature 'User can consult a cep' do
     fill_in :cep, with: '70000000'
     click_button 'Consultar CEP'
 
-    expect(page).to have_content('Não foi possível consultar o CEP (CEP não registrado).')
+    expect(page).to have_css('.cep-invalid', text: 'Não foi possível consultar o CEP (CEP não registrado).')
   end
 
   scenario 'User can consult a not informed cep' do
@@ -43,6 +43,6 @@ feature 'User can consult a cep' do
     fill_in :cep, with: '00000000'
     click_button 'Consultar CEP'
 
-    expect(page).to have_content('Não foi possível consultar o CEP (CEP não informado).')
+    expect(page).to have_css('.cep-invalid', text: 'Não foi possível consultar o CEP (CEP não informado).')
   end
 end

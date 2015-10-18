@@ -1,5 +1,9 @@
-<% if defined?(@consult_message) %>
-  <p><%= @consult_message %></p>
+<% if defined?(@cep_consultation_message) %>
+  <% if @cep_is_valid == true %>
+    <p class="cep-valid"><%= @cep_consultation_message %></p>
+  <% else %>
+    <p class="cep-invalid"><%= @cep_consultation_message %></p>
+  <% end %>
 <% end %>
 
 <%= form_tag consult_cep_path do %>
