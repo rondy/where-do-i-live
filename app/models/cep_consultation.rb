@@ -1,4 +1,6 @@
 class CepConsultation
+  attr_accessor :api_client
+
   def call(cep)
     response = get_cep_response(cep)
 
@@ -43,6 +45,10 @@ class CepConsultation
   end
 
   def get_cep_response(cep)
-    CepApiClient.new(cep).call
+    api_client.new(cep).call
+  end
+
+  def api_client
+    @api_client ||= CepApiClient
   end
 end
