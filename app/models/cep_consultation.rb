@@ -27,25 +27,34 @@ class CepConsultation
   private
 
   def cep_is_valid?(response)
-    response[:cod_retorno] == "0"
+    response.return_code == "0"
   end
 
   def build_valid_cep_address(response)
-    part_1 = [response[:ind_tipo_logradouro], response[:nom_bairro]].compact.join(', ')
-    part_2 = [response[:nom_localidade], response[:cod_uf]].compact.join(' - ')
-    [part_1, part_2].reject(&:blank?).join('. ')
+    address_part_1 = [
+      response.address_name,
+      response.neighborhood
+    ].compact.join(', ')
+
+    address_part_2 = [
+      response.city,
+      response.state
+    ].compact.join(' - ')
+
+    [address_part_1, address_part_2]
+      .reject(&:blank?).join('. ')
   end
 
   def cep_is_not_registered?(response)
-    response[:cod_retorno] == '1' && response[:des_mensagem_amigavel] == "CEP NAO CADASTRADO"
+    response.return_code == '1' && response.error_message == "CEP NAO CADASTRADO"
   end
 
   def cep_is_not_informed?(response)
-    response[:cod_retorno] == '1' && response[:des_mensagem_amigavel] == "SPBGE035 - CEP NAO INFORMADO"
+    response.return_code == '1' && response.error_message == "SPBGE035 - CEP NAO INFORMADO"
   end
 
   def get_cep_response(cep)
-    api_client.new(cep).call
+    CepApiResponse.new(api_client.new(cep).call)
   end
 
   def api_client
