@@ -7,7 +7,7 @@ describe CepConsultation do
     cep_consultation = CepConsultation.new.call(cep)
 
     expect(cep_consultation.valid?).to be(true)
-    expect(cep_consultation.message).to eq('RUA MARILA, JARDIM PAULISTA. SAO PAULO - SP')
+    expect(cep_consultation.message).to eq('RUA MARILIA, JARDIM PAULISTA. SAO PAULO - SP')
   end
 
   it 'consults a invalid cep' do

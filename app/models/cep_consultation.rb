@@ -1,15 +1,16 @@
 class CepConsultation
   def call(cep)
-    if cep == '01420020'
+    response = get_cep_response(cep)
+
+    if response[:cod_retorno] == "0"
       cep_is_valid = true
-      cep_consultation_message = 'RUA MARILA, JARDIM PAULISTA. SAO PAULO - SP'
-    elsif cep == '77500000'
-      cep_is_valid = true
-      cep_consultation_message = 'PORTO NACIONAL - TO'
-    elsif cep == '70000000'
+      part_1 = [response[:ind_tipo_logradouro], response[:nom_bairro]].compact.join(', ')
+      part_2 = [response[:nom_localidade], response[:cod_uf]].compact.join(' - ')
+      cep_consultation_message = [part_1, part_2].reject(&:blank?).join('. ')
+    elsif response[:cod_retorno]=='1' && response[:des_mensagem_amigavel] == "CEP NAO CADASTRADO"
       cep_is_valid = false
       cep_consultation_message = 'Não foi possível consultar o CEP (CEP não registrado).'
-    elsif cep == '00000000'
+    elsif response[:cod_retorno]=='1' && response[:des_mensagem_amigavel] == "SPBGE035 - CEP NAO INFORMADO"
       cep_is_valid = false
       cep_consultation_message = 'Não foi possível consultar o CEP (CEP não informado).'
     else
@@ -21,5 +22,25 @@ class CepConsultation
       valid?: cep_is_valid,
       message: cep_consultation_message,
     )
+  end
+
+  private
+
+  def get_cep_response(cep)
+    savon_client = Savon.client do
+      wsdl 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep?wsdl'
+      endpoint 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep'
+      basic_auth('usr_soa_ge', '66f82a4')
+    end
+
+    request_body = {
+      dados_entrada: {
+        cod_sistema: 'GE',
+        num_cep: cep
+      }
+    }
+
+    response = savon_client.call(:consulta_cep, message: request_body)
+    response.body[:consulta_cep_response][:retorno]
   end
 end

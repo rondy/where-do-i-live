@@ -7,7 +7,7 @@ feature 'User can consult a cep' do
     fill_in :cep, with: '01420020'
     click_button 'Consultar CEP'
 
-    expect(page).to have_css('.cep-valid', text: 'RUA MARILA, JARDIM PAULISTA. SAO PAULO - SP')
+    expect(page).to have_css('.cep-valid', text: 'RUA MARILIA, JARDIM PAULISTA. SAO PAULO - SP')
   end
 
   scenario 'User can consult a invalid cep' do
