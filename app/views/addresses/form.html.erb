@@ -1,8 +1,8 @@
-<% if defined?(@cep_consultation_message) %>
-  <% if @cep_is_valid == true %>
-    <p class="cep-valid"><%= @cep_consultation_message %></p>
+<% if defined?(@cep_consultation) %>
+  <% if @cep_consultation.valid? %>
+    <p class="cep-valid"><%= @cep_consultation.message %></p>
   <% else %>
-    <p class="cep-invalid"><%= @cep_consultation_message %></p>
+    <p class="cep-invalid"><%= @cep_consultation.message %></p>
   <% end %>
 <% end %>
 
