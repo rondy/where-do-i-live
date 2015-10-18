@@ -1,21 +1,7 @@
 require 'rails_helper'
 
 def get_cep_response(cep)
-  savon_client = Savon.client do
-    wsdl 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep?wsdl'
-    endpoint 'https://apiproxy-dev.cxdigital.io/servicosdev2/GEWSV0002_ConsultaCep'
-    basic_auth('usr_soa_ge', '66f82a4')
-  end
-
-  request_body = {
-    dados_entrada: {
-      cod_sistema: 'GE',
-      num_cep: cep
-    }
-  }
-
-  response = savon_client.call(:consulta_cep, message: request_body)
-  response.body[:consulta_cep_response][:retorno]
+  CepApiClient.new(cep).call
 end
 
 describe 'Consult CEP from SOAP API' do
