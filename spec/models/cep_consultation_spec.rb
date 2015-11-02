@@ -7,7 +7,12 @@ describe CepConsultation do
     cep_consultation = CepConsultation.new.call(cep)
 
     expect(cep_consultation.valid?).to be(true)
-    expect(cep_consultation.message).to eq('RUA MARILIA, JARDIM PAULISTA. SAO PAULO - SP')
+    expect(cep_consultation.address).to be_a_kind_of(CepServiceResponse::Address)
+    expect(cep_consultation.address.address_name).to eq('RUA MARILIA')
+    expect(cep_consultation.address.neighborhood).to eq('JARDIM PAULISTA')
+    expect(cep_consultation.address.city).to eq('SAO PAULO')
+    expect(cep_consultation.address.state).to eq('SP')
+    expect(cep_consultation.error_code).to be_nil
   end
 
   it 'consults a invalid cep' do
@@ -16,7 +21,8 @@ describe CepConsultation do
     cep_consultation = CepConsultation.new.call(cep)
 
     expect(cep_consultation.valid?).to be(false)
-    expect(cep_consultation.message).to eq('Não foi possível consultar o CEP (CEP inválido).')
+    expect(cep_consultation.address).to be_nil
+    expect(cep_consultation.error_code).to eq(:invalid)
   end
 
   it 'consults a generic cep' do
@@ -25,7 +31,12 @@ describe CepConsultation do
     cep_consultation = CepConsultation.new.call(cep)
 
     expect(cep_consultation.valid?).to be(true)
-    expect(cep_consultation.message).to eq('PORTO NACIONAL - TO')
+    expect(cep_consultation.address).to be_a_kind_of(CepServiceResponse::Address)
+    expect(cep_consultation.address.address_name).to eq(nil)
+    expect(cep_consultation.address.neighborhood).to eq(nil)
+    expect(cep_consultation.address.city).to eq('PORTO NACIONAL')
+    expect(cep_consultation.address.state).to eq('TO')
+    expect(cep_consultation.error_code).to be_nil
   end
 
   it 'consults a not registered cep' do
@@ -34,7 +45,8 @@ describe CepConsultation do
     cep_consultation = CepConsultation.new.call(cep)
 
     expect(cep_consultation.valid?).to be(false)
-    expect(cep_consultation.message).to eq('Não foi possível consultar o CEP (CEP não registrado).')
+    expect(cep_consultation.address).to be_nil
+    expect(cep_consultation.error_code).to eq(:not_registered)
   end
 
   it 'consults a not informed cep' do
@@ -43,6 +55,7 @@ describe CepConsultation do
     cep_consultation = CepConsultation.new.call(cep)
 
     expect(cep_consultation.valid?).to be(false)
-    expect(cep_consultation.message).to eq('Não foi possível consultar o CEP (CEP não informado).')
+    expect(cep_consultation.address).to be_nil
+    expect(cep_consultation.error_code).to eq(:not_informed)
   end
 end

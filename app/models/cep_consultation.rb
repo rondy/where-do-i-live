@@ -4,36 +4,38 @@ class CepConsultation
 
     if cep_response.valid?
       build_valid_consultation_response(
-        message: cep_response.full_address
+        address: cep_response.address
       )
     elsif cep_response.not_registered?
       build_invalid_consultation_response(
-        message: 'Não foi possível consultar o CEP (CEP não registrado).'
+        error_code: :not_registered
       )
     elsif cep_response.not_informed?
       build_invalid_consultation_response(
-        message: 'Não foi possível consultar o CEP (CEP não informado).'
+        error_code: :not_informed
       )
     else
       build_invalid_consultation_response(
-        message: 'Não foi possível consultar o CEP (CEP inválido).'
+        error_code: :invalid
       )
     end
   end
 
   private
 
-  def build_valid_consultation_response(message:)
+  def build_valid_consultation_response(address:)
     OpenStruct.new(
       valid?: true,
-      message: message
+      address: address,
+      error_code: nil
     )
   end
 
-  def build_invalid_consultation_response(message:)
+  def build_invalid_consultation_response(error_code:)
     OpenStruct.new(
       valid?: false,
-      message: message
+      address: nil,
+      error_code: error_code
     )
   end
 

@@ -15,7 +15,7 @@ describe CepServiceResponse do
     expect(subject.valid?).to be(true)
     expect(subject.not_registered?).to be(false)
     expect(subject.not_informed?).to be(false)
-    expect(subject.full_address).to eq('RUA MARILIA, JARDIM PAULISTA. SAO PAULO - SP')
+    expect(subject.address).to be_a_kind_of(CepServiceResponse::Address)
   end
 
   it 'returns a valid generic cep response' do
@@ -32,7 +32,7 @@ describe CepServiceResponse do
     expect(subject.valid?).to be(true)
     expect(subject.not_registered?).to be(false)
     expect(subject.not_informed?).to be(false)
-    expect(subject.full_address).to eq('SAO PAULO - SP')
+    expect(subject.address).to be_a_kind_of(CepServiceResponse::Address)
   end
 
   it 'returns a not registered cep response' do
@@ -46,7 +46,7 @@ describe CepServiceResponse do
     expect(subject.valid?).to be(false)
     expect(subject.not_registered?).to be(true)
     expect(subject.not_informed?).to be(false)
-    expect(subject.full_address).to eq('')
+    expect(subject.address).to be_a_kind_of(CepServiceResponse::Address)
   end
 
   it 'returns a not informed cep response' do
@@ -60,6 +60,6 @@ describe CepServiceResponse do
     expect(subject.valid?).to be(false)
     expect(subject.not_registered?).to be(false)
     expect(subject.not_informed?).to be(true)
-    expect(subject.full_address).to eq('')
+    expect(subject.address).to be_a_kind_of(CepServiceResponse::Address)
   end
 end

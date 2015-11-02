@@ -4,23 +4,19 @@ class CepServiceResponse
   CEP_NOT_REGISTERED = 'CEP NAO CADASTRADO'
   CEP_NOT_INFORMED = 'SPBGE035 - CEP NAO INFORMADO'
 
+  Address = Struct.new(:address_name, :neighborhood, :city, :state)
+
   def initialize(cep_api_response)
     @cep_api_response = cep_api_response
   end
 
-  def full_address
-    adress_part_1 = [
+  def address
+    Address.new(
       @cep_api_response.address_name,
-      @cep_api_response.neighborhood
-    ].compact.join(', ')
-
-    adress_part_2 = [
+      @cep_api_response.neighborhood,
       @cep_api_response.city,
       @cep_api_response.state
-    ].compact.join(' - ')
-
-    [adress_part_1, adress_part_2]
-      .reject(&:blank?).join('. ')
+    )
   end
 
   def valid?
